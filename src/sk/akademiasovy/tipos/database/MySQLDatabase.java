@@ -9,7 +9,8 @@ public class MySQLDatabase {
     private final String url = "jdbc:mysql://localhost:3308/";
     private final String dbName = "tipos";
     private final String driver = "com.mysql.jdbc.Driver";
-    private final String userName = "user2";
+    private final String userName2 = "user2";
+    private final String userName1 = "user1";
     private final String password = "secret";
     private Connection conn;
 
@@ -36,7 +37,7 @@ public class MySQLDatabase {
     public boolean insertValuesIntoDrawHistory(int arr[]) {
         try {
             Class.forName(driver).newInstance();
-            conn = DriverManager.getConnection(url + dbName, userName, password);
+            conn = DriverManager.getConnection(url + dbName, userName2, password);
             String cmd = "INSERT INTO draw_history(ball1, ball2, ball3, ball4, ball5) ";
             cmd += "VALUES(?,?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(cmd);
@@ -54,6 +55,21 @@ public class MySQLDatabase {
 
         }
 return true;
+    }
+
+    public void getNewBets() {
+        try {
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url + dbName, userName1, password);
+            String cmd="SELECT * FROM bets "+
+                    " INNER JOIN bet_details ON bets.id=bet_details.idb "+
+                    " WHERE bets.draw_id IS NULL";
+            PreparedStatement preparedStatement = conn.prepareStatement(cmd);
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
+
+
     }
 
 }
